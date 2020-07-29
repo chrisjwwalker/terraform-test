@@ -9,7 +9,12 @@ module "ogd_cognito" {
   source = "./modules/aws/cognito/user-pools"
 }
 
-module "ogd-client" {
+module "ogd_resource_server" {
+  source = "./modules/aws/cognito/resource-servers"
+  ogd_pool_id = module.ogd_cognito.ogd_user_pool_id
+}
+
+module "ogd_client" {
   source = "./modules/aws/cognito/clients"
   ogd_pool_id = module.ogd_cognito.ogd_user_pool_id
 }
