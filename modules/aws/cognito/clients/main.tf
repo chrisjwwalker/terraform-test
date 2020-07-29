@@ -4,7 +4,7 @@ resource "aws_cognito_user_pool_client" "ogd_client_service" {
 
   allowed_oauth_flows = ["client_credentials", "code"]
   allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_scopes = ["aws.cognito.signin.user.admin"]
+  allowed_oauth_scopes = ["openid"]
 
   generate_secret = true
 }
