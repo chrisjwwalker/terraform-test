@@ -1,5 +1,5 @@
-resource "aws_cognito_user_pool" "ogd_user_pool" {
-  name = "ogd-user-pool"
+resource "aws_cognito_user_pool" "user_pool" {
+  name = var.cognito_pool_name
 
   admin_create_user_config {
     allow_admin_create_user_only = true

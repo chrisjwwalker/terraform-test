@@ -1,20 +1,37 @@
 provider "aws" {
-  version = "2.33.0"
-  region = "eu-west-2"
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  shared_credentials_file = var.shared_credentials_file
+  region                  = var.region
+  profile                 = var.profile
+//  assume_role {
+//    role_arn = var.role_arn
+//  }
 }
 
-module "ogd_cognito" {
+module "cognito" {
   source = "./modules/aws/cognito/user-pools"
+  cognito_pool_name = var.cognito_pool_name
 }
 
-module "ogd_resource_server" {
+module "resource_server" {
   source = "./modules/aws/cognito/resource-servers"
-  ogd_pool_id = module.ogd_cognito.ogd_user_pool_id
+  resource_server_id = var.resource_server_id
+  resource_server_name = var.resource_server_name
+  user_pool_id = module.cognito.user_pool_id
+
+  custom_scope_1_desc = var.custom_scope_1_desc
+  custom_scope_1_name = var.custom_scope_1_name
+  custom_scope_2_desc = var.custom_scope_2_desc
+  custom_scope_2_name = var.custom_scope_2_name
+  custom_scope_3_desc = var.custom_scope_3_desc
+  custom_scope_3_name = var.custom_scope_3_name
 }
 
-module "ogd_client" {
+module "client" {
   source = "./modules/aws/cognito/clients"
-  ogd_pool_id = module.ogd_cognito.ogd_user_pool_id
+  ogd_pool_id = module.cognito.user_pool_id
+  user_pool_client_name = var.client_name
+
+  custom_scope_1 = "${var.resource_server_id}/${var.custom_scope_1_name}"
+  custom_scope_2 = "${var.resource_server_id}/${var.custom_scope_2_name}"
+  custom_scope_3 = "${var.resource_server_id}/${var.custom_scope_3_name}"
 }
